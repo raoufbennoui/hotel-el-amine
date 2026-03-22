@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hôtel Les Lilas — Boumerdès, Algérie</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --terracotta: #c8956c;
+    --terracotta-dark: #a8724a;
+    --brown-deep: #2c1810;
+    --brown-mid: #6b3a2a;
+    --beige: #f5ede0;
+    --beige-light: #fdf8f2;
+    --warm-white: rgba(255,245,235,0.92);
+    --gold: #d4a85a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--beige-light);
+    color: var(--brown-deep);
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+  /* NAVBAR */
+  #navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 20px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: all 0.4s ease;
+  }
+  #navbar.scrolled {
+    background: rgba(44, 24, 16, 0.97);
+    backdrop-filter: blur(12px);
+    padding: 14px 40px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--terracotta); }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--terracotta); }
+  .nav-cta {
+    background: var(--terracotta);
+    color: #fff !important;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.1em;
+    transition: background 0.3s !important;
+  }
+  .nav-cta:hover { background: var(--terracotta-dark) !important; color: #fff !important; }
+
+  /* HAMBURGER */
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { width: 24px; height: 1.5px; background: #fff; transition: all 0.3s; display: block; }
+  .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4.5px); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4.5px); }
+
+  #mobile-menu {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(44, 24, 16, 0.98);
+    z-index: 999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+  }
+  #mobile-menu.open { display: flex; }
+  #mobile-menu a {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  #mobile-menu a:hover { color: var(--terracotta); }
+
+  /* HERO */
+  #hero {
+    position: relative;
+    height: 100vh; min-height: 600px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  #hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1920');
+    background-size: cover;
+    background-position: center;
+    will-change: transform;
+  }
+  #hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(44,24,16,0.75), rgba(139,90,43,0.45));
+  }
+  #hero-content {
+    position: relative; z-index: 2;
+    text-align: center;
+    padding: 0 20px;
+    max-width: 860px;
+  }
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.9);
+    padding: 6px 20px;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0; transform: translateY(30px);
+    animation: fadeUp 0.8s ease-out 0.2s forwards;
+  }
+  .hero-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    opacity: 0; transform: translateY(30px);
+    animation: fadeUp 0.8s ease-out 0.5s forwards;
+  }
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    font-style: italic;
+    color: var(--warm-white);
+    margin-bottom: 40px;
+    line-height: 1.7;
+    max-width: 600px; margin-left: auto; margin-right: auto;
+    opacity: 0; transform: translateY(30px);
+    animation: fadeUp 0.8s ease-out 0.8s forwards;
+  }
+  .hero-buttons {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    opacity: 0; transform: translateY(30px);
+    animation: fadeUp 0.8s ease-out 1.1s forwards;
+  }
+  .btn-primary {
+    background: var(--terracotta);
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: 2px solid var(--terracotta);
+  }
+  .btn-primary:hover { background: var(--terracotta-dark); border-color: var(--terracotta-dark); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent;
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.7);
+    transition: all 0.3s;
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.15); border-color: #fff; transform: translateY(-2px); }
+
+  /* SCROLL INDICATOR */
+  #scroll-indicator {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    z-index: 2; transition: opacity 0.3s;
+  }
+  .scroll-arrow {
+    width: 20px; height: 20px;
+    border-right: 1.5px solid rgba(255,255,255,0.7);
+    border-bottom: 1.5px solid rgba(255,255,255,0.7);
+    transform: rotate(45deg);
+    animation: bounce 1.5s ease-in-out infinite;
+  }
+  .scroll-text { color: rgba(255,255,255,0.6); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes bounce { 0%,100% { transform: rotate(45deg) translateY(0); } 50% { transform: rotate(45deg) translateY(6px); } }
+
+  /* SECTIONS COMMON */
+  .section { padding: 100px 40px; }
+  .section-label {
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--terracotta); margin-bottom: 12px; display: block;
+  }
+  .section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--brown-deep);
+    line-height: 1.2; margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 1rem; color: #7a5c4e;
+    line-height: 1.8; max-width: 560px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* FADE IN ON SCROLL */
+  .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+  .fade-in-delay-1 { transition-delay: 0.1s; }
+  .fade-in-delay-2 { transition-delay: 0.2s; }
+  .fade-in-delay-3 { transition-delay: 0.3s; }
+
+  /* ROOMS */
+  #chambres { background: var(--beige-light); }
+  .room-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(44,24,16,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .room-card:hover { transform: translateY(-8px); box-shadow: 0 12px 40px rgba(44,24,16,0.15); }
+  .room-card img { width: 100%; height: 240px; object-fit: cover; transition: transform 0.5s; }
+  .room-card:hover img { transform: scale(1.05); }
+  .room-card-body { padding: 28px; }
+  .room-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--brown-deep); margin-bottom: 10px; }
+  .room-desc { font-size: 0.9rem; color: #8a6a5a; line-height: 1.7; margin-bottom: 20px; }
+  .room-price { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--terracotta); font-weight: 600; margin-bottom: 20px; }
+  .room-price span { font-size: 0.8rem; font-family: 'Jost', sans-serif; font-weight: 300; color: #aaa; }
+  .btn-whatsapp {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: #25D366; color: #fff;
+    padding: 12px 20px; border-radius: 50px;
+    font-size: 0.82rem; font-weight: 500; letter-spacing: 0.05em;
+    text-decoration: none; transition: all 0.3s; width: 100%;
+  }
+  .btn-whatsapp:hover { background: #1da851; transform: translateY(-1px); }
+
+  /* RESTAURANT */
+  #restaurant { background: var(--brown-deep); }
+  #restaurant .section-heading { color: #fff; }
+  #restaurant .section-sub { color: rgba(255,245,235,0.75); max-width: 100%; }
+  #restaurant .section-label { color: var(--gold); }
+  .restaurant-img { border-radius: 16px; overflow: hidden; height: 480px; }
+  .restaurant-img img { width: 100%; height: 100%; object-fit: cover; }
+  .hours-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .hours-icon { width: 8px; height: 8px; background: var(--terracotta); border-radius: 50%; flex-shrink: 0; }
+  .hours-text { color: rgba(255,245,235,0.8); font-size: 0.9rem; }
+  .btn-outline-gold {
+    display: inline-block; margin-top: 28px;
+    border: 1.5px solid var(--gold); color: var(--gold);
+    padding: 12px 28px; border-radius: 50px;
+    font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; transition: all 0.3s;
+  }
+  .btn-outline-gold:hover { background: var(--gold); color: var(--brown-deep); }
+
+  /* GALLERY */
+  #galerie { background: var(--beige); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 240px 240px;
+    gap: 12px;
+  }
+  .gallery-item {
+    overflow: hidden; border-radius: 12px; cursor: pointer;
+    position: relative;
+  }
+  .gallery-item:first-child { grid-row: span 2; }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; display: block; }
+  .gallery-item:hover img { transform: scale(1.08); }
+  .gallery-overlay {
+    position: absolute; inset: 0;
+    background: rgba(44,24,16,0); 
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.3s;
+  }
+  .gallery-item:hover .gallery-overlay { background: rgba(44,24,16,0.3); }
+  .gallery-overlay-icon { color: #fff; font-size: 2rem; opacity: 0; transition: opacity 0.3s; }
+  .gallery-item:hover .gallery-overlay-icon { opacity: 1; }
+
+  /* LIGHTBOX */
+  #lightbox {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.92);
+    align-items: center; justify-content: center;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox img { max-width: 90vw; max-height: 85vh; border-radius: 8px; object-fit: contain; }
+  #lightbox-close {
+    position: absolute; top: 24px; right: 32px;
+    color: #fff; font-size: 2rem; cursor: pointer;
+    background: none; border: none; line-height: 1;
+    opacity: 0.7; transition: opacity 0.2s;
+  }
+  #lightbox-close:hover { opacity: 1; }
+
+  /* ABOUT */
+  #a-propos { background: var(--beige-light); }
+  .about-img { border-radius: 16px; overflow: hidden; height: 500px; position: relative; }
+  .about-img img { width: 100%; height: 100%; object-fit: cover; }
+  .about-img-badge {
+    position: absolute; bottom: 28px; left: 28px;
+    background: var(--terracotta);
+    color: #fff; padding: 12px 20px; border-radius: 10px;
+    font-family: 'Playfair Display', serif;
+  }
+  .about-img-badge .num { font-size: 1.8rem; font-weight: 700; display: block; line-height: 1; }
+  .about-img-badge .lbl { font-size: 0.75rem; opacity: 0.9; }
+  .stat-box {
+    text-align: center; padding: 20px;
+    background: #fff; border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(44,24,16,0.07);
+  }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--terracotta); font-weight: 700; }
+  .stat-label { font-size: 0.8rem; color: #8a6a5a; margin-top: 4px; }
+
+  /* TESTIMONIALS */
+  #temoignages { background: var(--beige); }
+  .testimonial-card {
+    background: #fff; border-radius: 16px;
+    padding: 32px; position: relative;
+    box-shadow: 0 4px 20px rgba(44,24,16,0.07);
+  }
+  .testimonial-card::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem; color: var(--terracotta);
+    opacity: 0.2; position: absolute;
+    top: 10px; left: 20px; line-height: 1;
+  }
+  .stars { color: var(--terracotta); font-size: 0.9rem; margin-bottom: 16px; letter-spacing: 2px; }
+  .testimonial-text { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; color: var(--brown-mid); line-height: 1.8; margin-bottom: 20px; }
+  .testimonial-author { font-size: 0.85rem; font-weight: 500; color: var(--brown-deep); }
+  .testimonial-city { font-size: 0.78rem; color: #aaa; margin-top: 2px; }
+
+  /* CONTACT */
+  #contact { background: var(--brown-deep); }
+  #contact .section-heading { color: #fff; }
+  #contact .section-label { color: var(--gold); }
+  .contact-info-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+  .contact-icon { width: 40px; height: 40px; border-radius: 50%; background: rgba(200,149,108,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .contact-text-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 2px; }
+  .contact-text-val { font-size: 0.95rem; color: rgba(255,245,235,0.85); }
+  .btn-whatsapp-big {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    background: #25D366; color: #fff;
+    padding: 16px 28px; border-radius: 50px;
+    font-size: 0.95rem; font-weight: 500;
+    text-decoration: none; transition: all 0.3s;
+    margin-top: 28px; width: 100%;
+  }
+  .btn-whatsapp-big:hover { background: #1da851; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,0.3); }
+  .form-input {
+    width: 100%; padding: 14px 16px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px; color: #fff; font-size: 0.9rem;
+    font-family: 'Jost', sans-serif;
+    transition: border-color 0.3s;
+    outline: none;
+  }
+  .form-input::placeholder { color: rgba(255,255,255,0.35); }
+  .form-input:focus { border-color: var(--terracotta); }
+  .form-input option { background: var(--brown-deep); color: #fff; }
+  .form-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,245,235,0.6); margin-bottom: 6px; display: block; }
+  .btn-submit {
+    width: 100%; padding: 16px;
+    background: var(--terracotta); color: #fff;
+    border: none; border-radius: 50px;
+    font-size: 0.9rem; font-weight: 500; letter-spacing: 0.08em;
+    cursor: pointer; transition: all 0.3s; font-family: 'Jost', sans-serif;
+  }
+  .btn-submit:hover { background: var(--terracotta-dark); transform: translateY(-2px); }
+  #success-msg { display: none; background: rgba(37,211,102,0.15); border: 1px solid rgba(37,211,102,0.4); border-radius: 10px; padding: 16px; color: #4ade80; font-size: 0.9rem; text-align: center; margin-top: 16px; }
+
+  /* MAPS */
+  #maps { background: var(--beige); }
+  #maps iframe { border-radius: 16px; display: block; }
+
+  /* FOOTER */
+  footer { background: #1a0e08; padding: 60px 40px 30px; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--beige); margin-bottom: 12px; }
+  .footer-tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; color: rgba(245,237,224,0.5); font-size: 1rem; }
+  .footer-heading { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 20px; }
+  .footer-links { display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a { color: rgba(245,237,224,0.6); text-decoration: none; font-size: 0.88rem; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--terracotta); }
+  .footer-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 40px 0 24px; }
+  .footer-copy { color: rgba(245,237,224,0.35); font-size: 0.8rem; text-align: center; }
+
+  /* FLOATING WHATSAPP */
+  #float-wa {
+    position: fixed; bottom: 28px; right: 28px; z-index: 998;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #25D366;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+    text-decoration: none; transition: all 0.3s;
+  }
+  #float-wa:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 8px 30px rgba(37,211,102,0.5); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .section { padding: 70px 20px; }
+    #navbar { padding: 16px 20px; }
+    #navbar.scrolled { padding: 12px 20px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
+    .gallery-item:first-child { grid-row: span 1; }
+    footer { padding: 50px 20px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Les Lilas <span>✿</span></a>
+  <div class="nav-links">
+    <a href="#hero">Accueil</a>
+    <a href="chambres.html">Chambres</a>
+    <a href="#restaurant.html">Restaurant</a>
+    <a href="#galerie.html">Galerie</a>
+    <a href="#a-propos.htm">À Propos</a>
+    <a href="#contact" class="nav-cta">Réserver</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu">
+  <a href="#hero" onclick="closeMenu()">Accueil</a>
+  <a href="#chambres" onclick="closeMenu()">Chambres</a>
+  <a href="#restaurant" onclick="closeMenu()">Restaurant</a>
+  <a href="#galerie" onclick="closeMenu()">Galerie</a>
+  <a href="#a-propos" onclick="closeMenu()">À Propos</a>
+  <a href="#contact" onclick="closeMenu()" style="color: var(--terracotta);">Réserver</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div id="hero-bg"></div>
+  <div id="hero-overlay"></div>
+  <div id="hero-content">
+    <div class="hero-badge">✿ &nbsp; Boumerdès, Algérie</div>
+    <h1 class="hero-heading">Bienvenue à l'Hôtel<br>Les Lilas</h1>
+    <p class="hero-sub">Un havre de paix à deux pas de la Méditerranée — confort, chaleur et hospitalité algérienne vous attendent</p>
+    <div class="hero-buttons">
+      <a href="#chambres" class="btn-primary">Découvrir nos chambres</a>
+      <a href="#contact" class="btn-outline">Nous contacter</a>
+    </div>
+  </div>
+  <div id="scroll-indicator">
+    <div class="scroll-arrow"></div>
+    <span class="scroll-text">Défiler</span>
+  </div>
+</section>
+
+<!-- ROOMS -->
+<section class="section" id="chambres">
+  <div class="container">
+    <div class="text-center mb-16 fade-in">
+      <span class="section-label">Confort & Élégance</span>
+      <h2 class="section-heading" style="margin: 0 auto;">Nos Chambres</h2>
+      <p class="section-sub" style="margin: 16px auto 0; text-align: center;">Chaque chambre a été pensée pour votre confort, avec une touche chaleureuse typiquement algérienne.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px;">
+      
+      <div class="room-card fade-in fade-in-delay-1">
+        <div style="overflow: hidden;">
+          <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800" alt="Chambre Simple" loading="lazy">
+        </div>
+        <div class="room-card-body">
+          <h3 class="room-name">Chambre Simple</h3>
+          <p class="room-desc">Chambre confortable et lumineuse, idéale pour un voyageur solo. Lit simple, salle de bain privée, climatisation et WiFi inclus.</p>
+          <div class="room-price">3 000 DA <span>/ nuit</span></div>
+          <a href="https://wa.me/213551234567?text=Bonjour, je souhaite réserver une Chambre Simple." class="btn-whatsapp" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Réserver via WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <div class="room-card fade-in fade-in-delay-2">
+        <div style="overflow: hidden;">
+          <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800" alt="Chambre Double" loading="lazy">
+        </div>
+        <div class="room-card-body">
+          <h3 class="room-name">Chambre Double</h3>
+          <p class="room-desc">Spacieuse et élégante, parfaite pour les couples ou voyageurs en duo. Grand lit double, vue partielle sur la ville, tout confort.</p>
+          <div class="room-price">4 000 DA <span>/ nuit</span></div>
+          <a href="https://wa.me/213551234567?text=Bonjour, je souhaite réserver une Chambre Double." class="btn-whatsapp" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Réserver via WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <div class="room-card fade-in fade-in-delay-3">
+        <div style="overflow: hidden;">
+          <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800" alt="Suite" loading="lazy">
+        </div>
+        <div class="room-card-body">
+          <h3 class="room-name">Suite Prestige</h3>
+          <p class="room-desc">Notre suite prestige — salon séparé, grande chambre, baignoire et douche, pour une expérience hôtelière inoubliable.</p>
+          <div class="room-price">10 000 DA <span>/ nuit</span></div>
+          <a href="https://wa.me/213551234567?text=Bonjour, je souhaite réserver la Suite Prestige." class="btn-whatsapp" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Réserver via WhatsApp
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- RESTAURANT -->
+<section class="section" id="restaurant">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+      <div class="fade-in">
+        <span class="section-label">Saveurs Locales</span>
+        <h2 class="section-heading" style="color: #fff;">Notre Restaurant</h2>
+        <p style="color: rgba(255,245,235,0.75); font-size: 1rem; line-height: 1.8; margin: 16px 0 28px;">Une cuisine algérienne authentique servie dans un cadre chaleureux. Profitez de nos déjeuners et dîners en terrasse, avec des saveurs locales préparées avec soin par notre chef.</p>
+        <div>
+          <div class="hours-item"><div class="hours-icon"></div><span class="hours-text">Petit-déjeuner — 7h à 10h</span></div>
+          <div class="hours-item"><div class="hours-icon"></div><span class="hours-text">Déjeuner — 12h à 15h</span></div>
+          <div class="hours-item"><div class="hours-icon"></div><span class="hours-text">Dîner — 19h à 22h</span></div>
+        </div>
+        <a href="#contact" class="btn-outline-gold">Voir le menu</a>
+      </div>
+      <div class="restaurant-img fade-in fade-in-delay-2">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800" alt="Restaurant Les Lilas" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="section" id="galerie">
+  <div class="container">
+    <div class="text-center mb-12 fade-in">
+      <span class="section-label">Découvrez l'Hôtel</span>
+      <h2 class="section-heading" style="margin: 0 auto;">Galerie</h2>
+    </div>
+    <div class="gallery-grid fade-in">
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800" alt="Hôtel Les Lilas" loading="lazy">
+        <div class="gallery-overlay"><span class="gallery-overlay-icon">+</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800" alt="Chambre" loading="lazy">
+        <div class="gallery-overlay"><span class="gallery-overlay-icon">+</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800" alt="Piscine" loading="lazy">
+        <div class="gallery-overlay"><span class="gallery-overlay-icon">+</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800" alt="Vue mer" loading="lazy">
+        <div class="gallery-overlay"><span class="gallery-overlay-icon">+</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1506059612708-99d6128b0f65?w=800" alt="Restaurant" loading="lazy">
+        <div class="gallery-overlay"><span class="gallery-overlay-icon">+</span></div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800" alt="Hall" loading="lazy">
+        <div class="gallery-overlay"><span class="gallery-overlay-icon">+</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLightbox(event)">
+  <button id="lightbox-close" onclick="closeLightbox()">&times;</button>
+  <img id="lightbox-img" src="" alt="Photo">
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="a-propos">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+      <div class="about-img fade-in">
+        <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800" alt="Hôtel Les Lilas" loading="lazy">
+        <div class="about-img-badge">
+          <span class="num">★</span>
+          <span class="lbl">Boumerdès</span>
+        </div>
+      </div>
+      <div class="fade-in fade-in-delay-2">
+        <span class="section-label">Notre Histoire</span>
+        <h2 class="section-heading">Un lieu de vie,<br>pas juste un hôtel</h2>
+        <p class="section-sub" style="margin: 16px 0 32px;">L'Hôtel Les Lilas est bien plus qu'un simple lieu de séjour. Niché en plein cœur de Boumerdès, à quelques pas de la Méditerranée, il incarne la chaleur et l'hospitalité algérienne. Avec ses 45 chambres et suites, sa salle des fêtes et son restaurant, l'hôtel offre tout le confort nécessaire pour un séjour inoubliable — que vous soyez en voyage d'affaires ou en escapade en famille.</p>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+          <div class="stat-box"><div class="stat-num">45</div><div class="stat-label">Chambres</div></div>
+          <div class="stat-box"><div class="stat-num">500</div><div class="stat-label">Invités (salle des fêtes)</div></div>
+          <div class="stat-box"><div class="stat-num">2003</div><div class="stat-label">Depuis</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" id="temoignages">
+  <div class="container">
+    <div class="text-center mb-12 fade-in">
+      <span class="section-label">Avis Clients</span>
+      <h2 class="section-heading" style="margin: 0 auto;">Ce que disent nos clients</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+      <div class="testimonial-card fade-in fade-in-delay-1">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Un séjour magnifique, personnel accueillant et chambres très propres. Je recommande vivement !"</p>
+        <div class="testimonial-author">Karim B.</div>
+        <div class="testimonial-city">Alger</div>
+      </div>
+      <div class="testimonial-card fade-in fade-in-delay-2">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"L'emplacement est parfait, à deux pas de la plage. Le restaurant est excellent, on y retournera !"</p>
+        <div class="testimonial-author">Samira M.</div>
+        <div class="testimonial-city">Sétif</div>
+      </div>
+      <div class="testimonial-card fade-in fade-in-delay-3">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Rapport qualité-prix imbattable. La suite est spacieuse et le petit-déjeuner délicieux."</p>
+        <div class="testimonial-author">Youcef A.</div>
+        <div class="testimonial-city">Blida</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;">
+      <div class="fade-in">
+        <span class="section-label">Contactez-nous</span>
+        <h2 class="section-heading" style="color: #fff; margin-bottom: 32px;">Planifiez votre séjour</h2>
+        <div class="contact-info-item">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8956c" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.4 10.82 19.79 19.79 0 01.36 2.18 2 2 0 012.34 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.05 6.05l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div><div class="contact-text-label">Téléphone</div><div class="contact-text-val">055 123 45 67</div></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8956c" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div><div class="contact-text-label">Adresse</div><div class="contact-text-val">Cité Frantz Fanon, Lot N°06<br>35000 Boumerdès, Algérie</div></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8956c" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div><div class="contact-text-label">Email</div><div class="contact-text-val">contact@hotelleslilas.dz</div></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c8956c" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div><div class="contact-text-label">Réception</div><div class="contact-text-val">Ouverte 24h/24 — 7j/7</div></div>
+        </div>
+        <a href="https://wa.me/213551234567?text=Bonjour, je voudrais réserver une chambre à l'Hôtel Les Lilas." class="btn-whatsapp-big" target="_blank">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Réserver sur WhatsApp
+        </a>
+      </div>
+
+      <div class="fade-in fade-in-delay-2">
+        <form id="contact-form" onsubmit="submitForm(event)" style="display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <label class="form-label">Nom complet</label>
+            <input type="text" class="form-input" placeholder="Votre nom" required>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div>
+              <label class="form-label">Email</label>
+              <input type="email" class="form-input" placeholder="votre@email.com">
+            </div>
+            <div>
+              <label class="form-label">Téléphone</label>
+              <input type="tel" class="form-input" placeholder="0XX XX XX XX">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div>
+              <label class="form-label">Date d'arrivée</label>
+              <input type="date" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">Date de départ</label>
+              <input type="date" class="form-input">
+            </div>
+          </div>
+          <div>
+            <label class="form-label">Type de chambre</label>
+            <select class="form-input">
+              <option value="">Choisir une chambre</option>
+              <option>Chambre Simple — 3 000 DA / nuit</option>
+              <option>Chambre Double — 4 000 DA / nuit</option>
+              <option>Suite Prestige — 10 000 DA / nuit</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Message</label>
+            <textarea class="form-input" rows="3" placeholder="Demandes spéciales, questions..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit">Envoyer la demande</button>
+          <div id="success-msg">✓ Votre demande a été envoyée avec succès ! Nous vous contacterons très prochainement.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAPS -->
+<section id="maps" style="padding: 0;">
+  <div style="padding: 16px 40px 8px; max-width: 1200px; margin: 0 auto;">
+    <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--terracotta); margin-bottom: 12px; padding-top: 60px;">Nous trouver</p>
+  </div>
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12768.5!2d3.477!3d36.736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fb1d9a4c0b001%3A0x8db3c18cd2a53a40!2sBoumerd%C3%A8s!5e0!3m2!1sfr!2sdz!4v1700000000000"
+    width="100%" height="400" style="border:0; display:block;"
+    allowfullscreen="" loading="lazy">
+  </iframe>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; margin-bottom: 0;">
+      <div>
+        <div class="footer-logo">Les Lilas ✿</div>
+        <p class="footer-tagline">Votre havre de paix à Boumerdès</p>
+        <p style="color: rgba(245,237,224,0.45); font-size: 0.85rem; margin-top: 16px; line-height: 1.7;">Cité Frantz Fanon, Lot N°06<br>35000 Boumerdès, Algérie</p>
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background 0.3s;" onmouseover="this.style.background='#c8956c'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(245,237,224,0.7)"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a href="#" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background 0.3s;" onmouseover="this.style.background='#c8956c'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(245,237,224,0.7)" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="rgba(245,237,224,0.7)"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-heading">Navigation</p>
+        <div class="footer-links">
+          <a href="#hero">Accueil</a>
+          <a href="#chambres">Chambres</a>
+          <a href="#restaurant">Restaurant</a>
+          <a href="#galerie">Galerie</a>
+          <a href="#a-propos">À Propos</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-heading">Contact</p>
+        <div class="footer-links">
+          <a href="tel:0551234567">055 123 45 67</a>
+          <a href="mailto:contact@hotelleslilas.dz">contact@hotelleslilas.dz</a>
+          <a href="https://wa.me/213551234567" target="_blank">WhatsApp</a>
+        </div>
+        <p style="color: rgba(245,237,224,0.4); font-size: 0.8rem; margin-top: 20px; line-height: 1.6;">Réception ouverte<br>24h/24 — 7j/7</p>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <p class="footer-copy">© 2025 Hôtel Les Lilas. Tous droits réservés.</p>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a id="float-wa" href="https://wa.me/213551234567?text=Bonjour, je voudrais avoir des informations sur l'Hôtel Les Lilas." target="_blank" title="Réserver sur WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+  // NAVBAR SCROLL
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // HERO PARALLAX + FADE
+  const heroBg = document.getElementById('hero-bg');
+  const heroContent = document.getElementById('hero-content');
+  const scrollIndicator = document.getElementById('scroll-indicator');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    heroBg.style.transform = `translateY(${y * 0.4}px)`;
+    const opacity = Math.max(0, 1 - y / 400);
+    heroContent.style.opacity = opacity;
+    heroContent.style.transform = `translateY(${y * 0.15}px)`;
+    scrollIndicator.style.opacity = opacity;
+  });
+
+  // MOBILE MENU
+  function toggleMenu() {
+    document.getElementById('hamburger').classList.toggle('open');
+    document.getElementById('mobile-menu').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('mobile-menu').classList.contains('open') ? 'hidden' : '';
+  }
+  function closeMenu() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('mobile-menu').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // SCROLL ANIMATIONS
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // LIGHTBOX
+  function openLightbox(el) {
+    const src = el.querySelector('img').src;
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox(e) {
+    if (!e || e.target !== document.getElementById('lightbox-img')) {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // FORM SUBMIT
+  function submitForm(e) {
+    e.preventDefault();
+    document.getElementById('success-msg').style.display = 'block';
+    e.target.reset();
+    setTimeout(() => { document.getElementById('success-msg').style.display = 'none'; }, 5000);
+  }
+
+  // RESPONSIVE RESTAURANT
+  function checkResponsive() {
+    const restGrid = document.querySelector('#restaurant .container > div');
+    const aboutGrid = document.querySelector('#a-propos .container > div');
+    if (window.innerWidth < 768) {
+      if (restGrid) restGrid.style.gridTemplateColumns = '1fr';
+      if (aboutGrid) aboutGrid.style.gridTemplateColumns = '1fr';
+    } else {
+      if (restGrid) restGrid.style.gridTemplateColumns = '1fr 1fr';
+      if (aboutGrid) aboutGrid.style.gridTemplateColumns = '1fr 1fr';
+    }
+  }
+  checkResponsive();
+  window.addEventListener('resize', checkResponsive);
+</script>
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Rooms — Hotel El Amine</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --terracotta: #c8956c;
+    --terracotta-dark: #a8724a;
+    --brown-deep: #2c1810;
+    --beige: #f0ebe3;
+    --beige-light: #f7f3ee;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Jost', sans-serif; background: var(--beige-light); color: var(--brown-deep); overflow-x: hidden; }
+  h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+  /* NAVBAR */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(247,243,238,0.97);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(44,24,16,0.08);
+    padding: 16px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--brown-deep); text-decoration: none; }
+  .nav-logo span { color: var(--terracotta); }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-links a { color: var(--brown-deep); text-decoration: none; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; transition: opacity 0.2s; }
+  .nav-links a:hover, .nav-links a.active { opacity: 1; color: var(--terracotta); }
+  .nav-cta { background: var(--terracotta) !important; color: #fff !important; opacity: 1 !important; padding: 9px 22px; border-radius: 50px; }
+  .nav-cta:hover { background: var(--terracotta-dark) !important; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+  .hamburger span { width: 22px; height: 1.5px; background: var(--brown-deep); display: block; transition: all 0.3s; }
+  #mob-menu { display: none; position: fixed; inset: 0; background: var(--beige-light); z-index: 99; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
+  #mob-menu.open { display: flex; }
+  #mob-menu a { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--brown-deep); text-decoration: none; }
+  #mob-menu a:hover { color: var(--terracotta); }
+
+  /* PAGE HERO */
+  .page-hero {
+    margin-top: 73px;
+    background: var(--beige);
+    padding: 60px 48px 40px;
+    text-align: center;
+    border-bottom: 1px solid rgba(44,24,16,0.08);
+  }
+  .page-hero-label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 10px; display: block; }
+  .page-hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); color: var(--brown-deep); }
+  .page-hero p { font-size: 1rem; color: #8a6a5a; margin-top: 12px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+
+  /* ROOM SECTION */
+  .room-section {
+    max-width: 1200px; margin: 0 auto;
+    padding: 80px 48px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .room-section:not(:last-child) { border-bottom: 1px solid rgba(44,24,16,0.08); }
+  .room-section.reverse { direction: rtl; }
+  .room-section.reverse > * { direction: ltr; }
+
+  /* SLIDER */
+  .slider { position: relative; border-radius: 16px; overflow: hidden; background: #eee; }
+  .slider-track { display: flex; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); will-change: transform; }
+  .slider-track img { min-width: 100%; width: 100%; height: 420px; object-fit: cover; display: block; flex-shrink: 0; }
+  .slider-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(247,243,238,0.92);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; z-index: 10;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  }
+  .slider-btn:hover { background: #fff; transform: translateY(-50%) scale(1.08); }
+  .slider-btn.prev { left: 14px; }
+  .slider-btn.next { right: 14px; }
+  .slider-btn svg { width: 18px; height: 18px; stroke: var(--brown-deep); }
+  .slider-dots { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.3s; border: none; padding: 0; }
+  .dot.active { background: #fff; width: 18px; border-radius: 3px; }
+
+  /* ROOM INFO */
+  .room-info {}
+  .room-tag { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 8px; display: block; }
+  .room-name { font-size: clamp(2rem, 3.5vw, 2.8rem); color: var(--brown-deep); line-height: 1.2; margin-bottom: 10px; }
+  .room-size { font-size: 0.9rem; color: #8a6a5a; margin-bottom: 24px; }
+  .room-price-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 28px; }
+  .room-price { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--terracotta); font-weight: 600; }
+  .room-price-label { font-size: 0.82rem; color: #aaa; }
+  .amenities { list-style: none; margin-bottom: 32px; display: flex; flex-direction: column; gap: 0; }
+  .amenities li {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(44,24,16,0.07);
+    font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--brown-deep);
+  }
+  .amenities li:first-child { border-top: 1px solid rgba(44,24,16,0.07); }
+  .amenity-icon { width: 18px; height: 18px; color: var(--terracotta); flex-shrink: 0; }
+  .btn-reserve {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--terracotta); color: #fff;
+    padding: 14px 32px; border-radius: 4px;
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; transition: all 0.3s;
+    border: 2px solid var(--terracotta);
+  }
+  .btn-reserve:hover { background: var(--terracotta-dark); border-color: var(--terracotta-dark); }
+  .btn-reserve-outline {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent; color: var(--terracotta);
+    padding: 14px 32px; border-radius: 4px;
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; transition: all 0.3s;
+    border: 2px solid var(--terracotta);
+    margin-left: 12px;
+  }
+  .btn-reserve-outline:hover { background: var(--terracotta); color: #fff; }
+
+  /* FOOTER */
+  footer { background: var(--brown-deep); padding: 40px 48px; margin-top: 80px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #f5ede0; }
+  .footer-logo span { color: var(--terracotta); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: rgba(245,237,224,0.5); font-size: 0.8rem; text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--terracotta); }
+  .footer-copy { color: rgba(245,237,224,0.3); font-size: 0.75rem; width: 100%; text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.07); }
+
+  /* FLOATING WA */
+  #float-wa { position: fixed; bottom: 28px; right: 28px; z-index: 200; width: 54px; height: 54px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37,211,102,0.4); text-decoration: none; transition: all 0.3s; }
+  #float-wa:hover { transform: scale(1.1); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .room-section { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
+    .room-section.reverse { direction: ltr; }
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .page-hero { padding: 50px 24px 36px; }
+    footer { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html" class="nav-logo">Hotel El Amine <span>✿</span></a>
+  <div class="nav-links">
+    <a href="index.html">Accueil</a>
+    <a href="chambres.html" class="active">Chambres</a>
+    <a href="restaurant.html">Restaurant</a>
+    <a href="index.html#galerie">Galerie</a>
+    <a href="index.html#a-propos">À Propos</a>
+    <a href="index.html#contact" class="nav-cta">Réserver</a>
+  </div>
+  <button class="hamburger" onclick="document.getElementById('mob-menu').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mob-menu">
+  <a href="index.html" onclick="document.getElementById('mob-menu').classList.remove('open')">Accueil</a>
+  <a href="chambres.html" onclick="document.getElementById('mob-menu').classList.remove('open')">Chambres</a>
+  <a href="restaurant.html" onclick="document.getElementById('mob-menu').classList.remove('open')">Restaurant</a>
+  <a href="index.html#contact" onclick="document.getElementById('mob-menu').classList.remove('open')" style="color:var(--terracotta)">Réserver</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <span class="page-hero-label">Hotel El Amine — Boumerdès</span>
+  <h1>Nos Chambres</h1>
+  <p>Chaque chambre a été pensée pour votre confort, avec une touche chaleureuse et authentiquement algérienne.</p>
+</div>
+
+<!-- ===== ROOM 1 — CHAMBRE SIMPLE ===== -->
+<div class="room-section">
+  <div class="slider" id="slider-1">
+    <div class="slider-track" id="track-1">
+      <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900" alt="Chambre Simple">
+      <img src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=900" alt="Chambre Simple salle de bain">
+      <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=900" alt="Chambre Simple vue">
+      <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=900" alt="Chambre Simple détail">
+    </div>
+    <button class="slider-btn prev" onclick="slide('1',-1)">
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <button class="slider-btn next" onclick="slide('1',1)">
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="slider-dots" id="dots-1">
+      <button class="dot active" onclick="goTo('1',0)"></button>
+      <button class="dot" onclick="goTo('1',1)"></button>
+      <button class="dot" onclick="goTo('1',2)"></button>
+      <button class="dot" onclick="goTo('1',3)"></button>
+    </div>
+  </div>
+  <div class="room-info">
+    <span class="room-tag">Chambre Standard</span>
+    <h2 class="room-name">Chambre Simple</h2>
+    <p class="room-size">Confort & tranquillité pour voyageur solo</p>
+    <div class="room-price-row">
+      <span class="room-price">3 000 DA</span>
+      <span class="room-price-label">/ nuit</span>
+    </div>
+    <ul class="amenities">
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10"/></svg>
+        Lit simple grand confort
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+        WiFi gratuit haut débit
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        Téléviseur satellite
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m8.66-9h-1M4.34 12h-1m15.07-5.07l-.71.71M6.34 17.66l-.71.71m12.02 0l-.71-.71M6.34 6.34l-.71-.71M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Climatisation
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        Salle de bain privée
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        Petit-déjeuner inclus en option
+      </li>
+    </ul>
+    <div>
+      <a href="https://wa.me/213551234567?text=Bonjour, je souhaite réserver une Chambre Simple." class="btn-reserve" target="_blank">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Réserver
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ROOM 2 — CHAMBRE DOUBLE ===== -->
+<div class="room-section reverse" style="background: var(--beige);">
+  <div class="room-info">
+    <span class="room-tag">Chambre Supérieure</span>
+    <h2 class="room-name">Chambre Double</h2>
+    <p class="room-size">Élégance et espace pour deux</p>
+    <div class="room-price-row">
+      <span class="room-price">4 000 DA</span>
+      <span class="room-price-label">/ nuit</span>
+    </div>
+    <ul class="amenities">
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10"/></svg>
+        Grand lit double
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+        WiFi gratuit haut débit
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M3 8a2 2 0 00-2 2v4a2 2 0 002 2h9a2 2 0 002-2v-4a2 2 0 00-2-2H3z"/></svg>
+        Téléviseur satellite 49 pouces
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m8.66-9h-1M4.34 12h-1m15.07-5.07l-.71.71M6.34 17.66l-.71.71m12.02 0l-.71-.71M6.34 6.34l-.71-.71M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Climatisation
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        Coffre-fort
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        Vue partielle sur la ville
+      </li>
+    </ul>
+    <div>
+      <a href="https://wa.me/213551234567?text=Bonjour, je souhaite réserver une Chambre Double." class="btn-reserve" target="_blank">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Réserver
+      </a>
+    </div>
+  </div>
+  <div class="slider" id="slider-2">
+    <div class="slider-track" id="track-2">
+      <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=900" alt="Chambre Double">
+      <img src="https://images.unsplash.com/photo-1591088398332-8a7791972843?w=900" alt="Chambre Double vue">
+      <img src="https://images.unsplash.com/photo-1566195992011-5f6b21e539aa?w=900" alt="Chambre Double salle de bain">
+      <img src="https://images.unsplash.com/photo-1587985064135-0366536eab42?w=900" alt="Chambre Double détail">
+    </div>
+    <button class="slider-btn prev" onclick="slide('2',-1)">
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <button class="slider-btn next" onclick="slide('2',1)">
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="slider-dots" id="dots-2">
+      <button class="dot active" onclick="goTo('2',0)"></button>
+      <button class="dot" onclick="goTo('2',1)"></button>
+      <button class="dot" onclick="goTo('2',2)"></button>
+      <button class="dot" onclick="goTo('2',3)"></button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ROOM 3 — SUITE ===== -->
+<div class="room-section">
+  <div class="slider" id="slider-3">
+    <div class="slider-track" id="track-3">
+      <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900" alt="Suite Prestige">
+      <img src="https://images.unsplash.com/photo-1614649536264-c1b5b05d50a5?w=900" alt="Suite salon">
+      <img src="https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=900" alt="Suite salle de bain">
+      <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=900" alt="Suite vue">
+    </div>
+    <button class="slider-btn prev" onclick="slide('3',-1)">
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <button class="slider-btn next" onclick="slide('3',1)">
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="slider-dots" id="dots-3">
+      <button class="dot active" onclick="goTo('3',0)"></button>
+      <button class="dot" onclick="goTo('3',1)"></button>
+      <button class="dot" onclick="goTo('3',2)"></button>
+      <button class="dot" onclick="goTo('3',3)"></button>
+    </div>
+  </div>
+  <div class="room-info">
+    <span class="room-tag">Suite Prestige</span>
+    <h2 class="room-name">Suite Hotel El Amine</h2>
+    <p class="room-size">L'expérience hôtelière ultime</p>
+    <div class="room-price-row">
+      <span class="room-price">10 000 DA</span>
+      <span class="room-price-label">/ nuit</span>
+    </div>
+    <ul class="amenities">
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10"/></svg>
+        Salon séparé & grande chambre
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+        WiFi gratuit haut débit
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+        Baignoire & douche italienne
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M3 8a2 2 0 00-2 2v4a2 2 0 002 2h9a2 2 0 002-2v-4a2 2 0 00-2-2H3z"/></svg>
+        Téléviseur 55 pouces
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        Coffre-fort & minibar
+      </li>
+      <li>
+        <svg class="amenity-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+        Service en chambre 24h/24
+      </li>
+    </ul>
+    <div>
+      <a href="https://wa.me/213551234567?text=Bonjour, je souhaite réserver la Suite Prestige Hotel El Amine." class="btn-reserve" target="_blank">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Réserver
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Hotel El Amine <span>✿</span></div>
+    <div class="footer-links">
+      <a href="index.html">Accueil</a>
+      <a href="chambres.html">Chambres</a>
+      <a href="restaurant.html">Restaurant</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <p class="footer-copy">© 2025 Hotel El Amine — Boumerdès, Algeria</p>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a id="float-wa" href="https://wa.me/213551234567" target="_blank">
+  <svg width="26" height="26" fill="#fff" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+  const state = { '1': 0, '2': 0, '3': 0 };
+  const total = { '1': 4, '2': 4, '3': 4 };
+
+  function slide(id, dir) {
+    state[id] = (state[id] + dir + total[id]) % total[id];
+    update(id);
+  }
+
+  function goTo(id, idx) {
+    state[id] = idx;
+    update(id);
+  }
+
+  function update(id) {
+    document.getElementById('track-' + id).style.transform = `translateX(-${state[id] * 100}%)`;
+    document.querySelectorAll(`#dots-${id} .dot`).forEach((d, i) => {
+      d.classList.toggle('active', i === state[id]);
+    });
+  }
+
+  // Auto-advance sliders
+  setInterval(() => { if(document.hasFocus()) slide('1', 1); }, 5000);
+  setInterval(() => { if(document.hasFocus()) slide('2', 1); }, 6000);
+  setInterval(() => { if(document.hasFocus()) slide('3', 1); }, 7000);
+</script>
+</body>
+</html>
