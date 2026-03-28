@@ -2,7 +2,7 @@ A complete multi-page hotel website built for a real
 hospitality business in Boumerdès, Algeria.
 
 ## 🔗 Live Demo
-*(https://hotel-el-amine.netlify.app)*
+[*(https://hotel-el-amine.netlify.app)*](https://hotelelamine.netlify.app/)
 
 ## 📸 Preview
 ![Hotel El Amine](preview.png)
