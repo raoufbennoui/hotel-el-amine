@@ -1,13 +1,13 @@
 A complete multi-page hotel website built for a real 
 hospitality business in Boumerdès, Algeria.
 
-## 🔗 Live Demo
+## Live Demo
 [*(https://hotel-el-amine.netlify.app)*](https://hotelelamine.netlify.app/)
 
-## 📸 Preview
+##  Preview
 ![Hotel El Amine](preview.png)
 
-## ✨ Features
+##  Features
 
 - **Parallax hero section** with smooth scroll effect
 - **Photo sliders** on room cards with fade transitions
@@ -19,7 +19,7 @@ hospitality business in Boumerdès, Algeria.
 - **Sticky navbar** with scroll-triggered style change
 - **Multi-page architecture** — 6 separate pages
 
-## 📄 Pages
+##  Pages
 
 | Page | Description |
 |------|-------------|
@@ -30,7 +30,7 @@ hospitality business in Boumerdès, Algeria.
 | `a-propos.html` | About — hotel story, team, stats |
 | `contact.html` | Contact — reservation form, map, WhatsApp |
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **HTML5** — semantic markup
 - **Tailwind CSS** — utility-first styling via CDN
@@ -39,7 +39,7 @@ hospitality business in Boumerdès, Algeria.
 - **Intersection Observer API** — scroll animations
 - **Netlify** — deployment and hosting
 
-## 🚀 Getting Started
+##  Getting Started
 
 No build tools required. Just open in your browser:
 ```bash
@@ -52,7 +52,7 @@ open index.html
 
 Or simply visit the **[live demo](https://hotel-el-amine.netlify.app)**
 
-## 📱 Mobile Optimization
+##  Mobile Optimization
 
 Built mobile-first with:
 - Hamburger navigation menu
@@ -61,7 +61,7 @@ Built mobile-first with:
 - Optimized images with lazy loading
 - Fast load times on mobile data connections
 
-## 💡 What I Learned
+##  What I Learned
 
 Building this project deepened my understanding of:
 - CSS layout systems (Flexbox and Grid)
@@ -71,7 +71,7 @@ Building this project deepened my understanding of:
 - Client-server architecture through WhatsApp API integration
 - The gap in digital presence for Algerian hospitality businesses
 
-## 🏨 Business Context
+##  Business Context
 
 Most hotels in Boumerdès, Algeria have no web presence 
 or outdated websites that don't work on mobile. This 
